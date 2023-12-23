@@ -1,23 +1,37 @@
 {
-  "name": "my-hust",
+  "name": "hustentertainment",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "node -r dotenv/config ./scripts/seed.js"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
+    "@tippyjs/react": "^4.2.6",
+    "@vercel/postgres": "^0.5.1",
+    "bcryptjs": "^2.4.3",
+    "crypto": "^1.0.1",
+    "firebase": "^10.7.0",
+    "formidable": "^3.5.1",
+    "heroicons": "^2.0.18",
+    "mongoose": "^8.0.1",
+    "next": "14.0.3",
+    "next-auth": "^4.24.5",
+    "nodemailer": "^6.9.7",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.0.4"
+    "react-hot-toast": "^2.4.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
     "eslint": "^8",
-    "eslint-config-next": "14.0.4"
+    "eslint-config-next": "14.0.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
   }
 }
