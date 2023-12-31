@@ -11,11 +11,12 @@ const MenuItemInMenu = ({
   date,
   categories,
   price,
+  artists,
+  types,
   address,
   index,
 }) => {
   const addressReal = address.split(" ");
-  console.log(addressReal[addressReal.length - 1]);
   return (
     <Link href={"/event/" + _id} className="flex flex-col justify-end">
       <div className="bg-primary/50 p-2 rounded-lg hover:bg-primary/20 hover:shadow-2xl hover: shadow-black/50 transition-all relative">

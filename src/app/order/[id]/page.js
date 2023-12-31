@@ -36,6 +36,7 @@ export default function OrderPage() {
                     name: item.types[i].name,
                     quantity: 0,
                     price: item.types[i].price,
+                    sum: item.types[i].quantity,
                   },
                 ];
               } else return prev;
@@ -67,8 +68,8 @@ export default function OrderPage() {
     setSum(total);
   }, [orderItem]);
 
-  console.log(menuItem);
-  console.log(menuItem?.types?.length, order, orderItem);
+  console.log(order);
+  // console.log(menuItem?.types?.length, order, orderItem);
   const getFormattedDay = () => {
     const date = new Date(menuItem?.date);
     const daysOfWeek = [
@@ -130,15 +131,30 @@ export default function OrderPage() {
                 key={index}
                 className="py-6 grid grid-cols-4 border-b border-dashed"
               >
-                <div className="col-span-2 flex items-center">{type?.name}</div>
+                <div className="col-span-2 flex items-start flex-col">
+                  {type?.name}
+                  {type?.quantity <= 0 && (
+                    <span className="text-primary font-semibold text-bg">
+                      Hết vé
+                    </span>
+                  )}
+                </div>
                 <div className="flex justify-end items-center">
                   {type?.price} VND
                 </div>
                 <div className="flex justify-end items-center">
-                  <div className="flex border-2">
+                  <div
+                    className={`flex border-2 ${
+                      type?.quantity <= 0 ? "bg-gray-400" : ""
+                    }`}
+                  >
                     <div
                       className="px-3 py-1 flex items-center cursor-pointer"
-                      onClick={() => handleQuantityChange(index, -0.5)}
+                      onClick={() => {
+                        if (type?.quantity > 0) {
+                          handleQuantityChange(index, -0.5);
+                        }
+                      }}
                     >
                       <Sub className="w-4 h-4" />
                     </div>
@@ -147,7 +163,11 @@ export default function OrderPage() {
                     </div>
                     <div
                       className="px-3 py-1 flex items-center cursor-pointer"
-                      onClick={() => handleQuantityChange(index, 0.5)}
+                      onClick={() => {
+                        if (type?.quantity > 0) {
+                          handleQuantityChange(index, 0.5);
+                        }
+                      }}
                     >
                       <Plus className="w-4 h-4" />
                     </div>
@@ -199,7 +219,9 @@ export default function OrderPage() {
             </div>
           </div>
           <Link
-            href={"/order/" + id + "/step2"}
+            href={
+              orderItem.length > 0 ? "/order/" + id + "/step2" : "/order/" + id
+            }
             className="mt-8 p-4 flex justify-center bg-green-600 text-white font-semibold text-lg"
           >
             Tiếp tục

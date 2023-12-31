@@ -19,7 +19,7 @@ export default function UserTabs({ isAdmin }) {
             className={path === "/categories" ? "active" : ""}
             href={"/categories"}
           >
-            categories
+            Categories
           </Link>
           <Link
             className={path.includes("menu-items") ? "active" : ""}
@@ -33,8 +33,11 @@ export default function UserTabs({ isAdmin }) {
           >
             Users
           </Link>
-          <Link className={path === "/orders" ? "active" : ""} href={"/users"}>
-            Orders
+          <Link
+            className={path.includes("vouchers") ? "active" : ""}
+            href={"/vouchers"}
+          >
+            Vouchers
           </Link>
         </>
       )}

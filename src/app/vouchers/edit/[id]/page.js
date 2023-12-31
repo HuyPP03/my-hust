@@ -8,22 +8,20 @@ import React from "react";
 import Link from "next/link";
 import Left from "@/components/Icons/Left";
 import { redirect, useParams } from "next/navigation";
-import MenuItemForm from "@/components/Layout/MenuItemForm";
 import DeleteButton from "@/components/Layout/DeleteButton";
-import Close from "@/components/Icons/Close";
+import VoucherForm from "@/components/Layout/VoucherForm";
 
-export default function EditMenuItemPage() {
+export default function EditVoucherPage() {
   const { id } = useParams();
   const { loading, data } = useProfile();
-  const [menuItem, setMenuItem] = useState(null);
+  const [voucher, setVoucher] = useState(null);
   const [redirectToItems, setRedirectToItems] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    fetch("/api/menu-items").then((res) => {
+    fetch("/api/voucher").then((res) => {
       res.json().then((items) => {
         const item = items.find((i) => i._id === id);
-        setMenuItem(item);
+        setVoucher(item);
       });
     });
   }, []);
@@ -32,7 +30,7 @@ export default function EditMenuItemPage() {
     try {
       data = { ...data, _id: id };
       const savingPromise = new Promise(async (resolve, reject) => {
-        const response = await fetch("/api/menu-items", {
+        const response = await fetch("/api/voucher", {
           method: "PUT",
           body: JSON.stringify(data),
           headers: { "Content-Type": "application/json" },
@@ -53,7 +51,7 @@ export default function EditMenuItemPage() {
   async function handleDeleteClick() {
     try {
       const promise = new Promise(async (resolve, reject) => {
-        const response = await fetch("/api/menu-items?_id=" + id, {
+        const response = await fetch("/api/voucher?_id=" + id, {
           method: "DELETE",
         });
         if (response.ok) resolve();
@@ -70,53 +68,31 @@ export default function EditMenuItemPage() {
     }
   }
   if (redirectToItems) {
-    return redirect("/menu-items");
+    return redirect("/vouchers");
   }
   if (loading) return "Loading user profile...";
   if (!data?.admin) return "Not an admin.";
   return (
     <section className="mt-8">
-      {isOpen && (
-        <div className="fixed h-screen bg-black/50 w-screen left-0 top-0 z-[9999]  flex justify-center items-center">
-          <div className="w-[600px] bg-white my-20 max-h-[650px] rounded-3xl overflow-hidden">
-            <div className="flex flex-col gap-3 justify-end rounded-tr-3xl overflow-hidden sticky">
-              <div
-                className="bg-primary w-fit flex px-3 py-1 text-white h-fit cursor-pointer items-end ml-auto"
-                onClick={() => setIsOpen(false)}
-              >
-                <span>Đóng</span>
-                <Close />
-              </div>
-              <div className="text-2xl text-gray-700 font-semibold mb-4 ml-6">
-                Thống kê
-              </div>
-            </div>
-            <div className="ml-6 my-1 overflow-y-scroll max-h-[550px]"></div>
-          </div>
-        </div>
-      )}
       <UserTabs isAdmin={data.admin} />
       <div className="mt-8 max-w-2xl mx-auto">
-        <Link className="button" href={"/menu-items"}>
+        <Link className="button" href={"/vouchers"}>
           <Left />
-          <span>Show all menu items</span>
+          <span>Show all vouchers</span>
         </Link>
       </div>
       <h1 className="text-center text-primary text-4xl pt-10 font-semibold italic p-4">
-        Edit concert
+        Edit voucher
       </h1>
-      {menuItem && (
+      {voucher && (
         <>
-          <MenuItemForm onSubmit={handleFormSubmit} menuItem={menuItem} />
+          <VoucherForm onSubmit={handleFormSubmit} voucher={voucher} />
           <div className="max-w-2xl mx-auto mt-4">
-            <div className="max-w-[458px] ml-auto">
+            <div className="max-w-2xl ml-auto">
               <DeleteButton
-                label={"Delete this ticket"}
+                label={"Delete this voucher"}
                 onDelete={handleDeleteClick}
               />
-              <button className="mt-4" onClick={() => setIsOpen(true)}>
-                Thống kê doanh thu
-              </button>
             </div>
           </div>
         </>

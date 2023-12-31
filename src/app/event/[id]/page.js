@@ -13,9 +13,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import NumberStar from "@/libs/numberStar";
 import getTimeAgo from "@/libs/getTimeAgo";
+import Right from "@/components/Icons/Right";
+import Close from "@/components/Icons/Close";
 
 export default function OrderPage() {
   const { id } = useParams();
@@ -23,36 +24,10 @@ export default function OrderPage() {
   const [menuItem, setMenuItem] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [numberStar, setNumberStar] = useState(5);
-  const [comment, setComment] = useState("");
-  const [orderId, setOrderId] = useState("");
-
   const [commentsId, setCommentsId] = useState([]);
-  const [user, setUser] = useState(null);
-  const [existOrder, setExistOrder] = useState(false);
-  const [order, setOrder] = useState([]);
+  const [commentFives, setCommentFives] = useState([]);
 
   const date = new Date(menuItem?.date);
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      fetch("/api/profile").then((response) => {
-        response.json().then((data) => {
-          setUser(data);
-          // setIsAdmin(data.admin);
-          // setProfileFetched(true);
-        });
-      });
-      fetchOrder();
-    }
-  }, [session, status]);
-  function fetchOrder() {
-    fetch("/api/order").then((res) => {
-      res.json().then((items) => {
-        setOrder(items);
-      });
-    });
-  }
   useEffect(() => {
     setLoading(true);
     fetch("/api/menu-items").then((res) => {
@@ -64,67 +39,15 @@ export default function OrderPage() {
     });
     fetchComment();
   }, []);
-  useEffect(() => {
-    const item = order.filter(
-      (i) => i.ticketId === id && i.userEmail === session?.user?.email
-    );
-    if (item?.length > 0) {
-      setExistOrder(true);
-      setOrderId(item[0]?._id);
-    }
-  }, [order, id, session]);
-  console.log(orderId);
   function fetchComment() {
     fetch("/api/comment").then((res) => {
       res.json().then((comment) => {
-        const commentId = comment.filter((c) => c.ticketId === id);
-        setCommentsId(commentId.reverse());
+        let commentId = comment.filter((c) => c.ticketId === id);
+        commentId = commentId.reverse();
+        setCommentsId(commentId);
+        setCommentFives(commentId.slice(0, 5));
       });
     });
-  }
-  async function handleFormSubmit(e) {
-    e.preventDefault();
-    try {
-      const savingPromise = new Promise(async (resolve, reject) => {
-        const response = await fetch("/api/comment", {
-          method: "POST",
-          body: JSON.stringify({
-            ticketId: id,
-            userName: user?.name,
-            userImage: user?.image,
-            comment,
-            numberStar,
-          }),
-          headers: { "Content-Type": "application/json" },
-        });
-        if (orderId) {
-          const deleteOrderResponse = await fetch("/api/order?_id=" + orderId, {
-            method: "DELETE",
-          });
-
-          if (deleteOrderResponse.ok) {
-            setOrderId("");
-          } else {
-            console.error("Failed to delete order");
-            setIsDeletingOrder(false);
-          }
-        }
-        setComment("");
-        setNumberStar(5);
-        fetchOrder();
-        setExistOrder(false);
-        fetchComment();
-        if (response.ok) resolve();
-        else reject();
-      });
-      await toast.promise(savingPromise, {
-        loading: "Saving this item...",
-        success: "Saved!",
-        error: "Error!",
-      });
-    } catch (error) {
-      console.log(error);
-    }
   }
   const getFormattedDay = () => {
     const date = new Date(menuItem?.date);
@@ -142,7 +65,47 @@ export default function OrderPage() {
   };
   if (loading) return "Loading...";
   return (
-    <section className="bg-gray-100">
+    <section className="bg-gray-100 relative">
+      {isOpen && (
+        <div className="fixed h-screen bg-black/50 w-screen left-0 top-0 z-[9999]  flex justify-center items-center">
+          <div className="w-[600px] bg-white my-20 max-h-[650px] rounded-3xl overflow-hidden">
+            <div className="flex flex-col gap-3 justify-end rounded-tr-3xl overflow-hidden sticky">
+              <div
+                className="bg-primary w-fit flex px-3 py-1 text-white h-fit cursor-pointer items-end ml-auto"
+                onClick={() => setIsOpen(false)}
+              >
+                <span>Đóng</span>
+                <Close />
+              </div>
+              <div className="text-2xl text-gray-700 font-semibold mb-4 ml-6">
+                Đánh giá
+              </div>
+            </div>
+            <div className="ml-6 my-1 overflow-y-scroll max-h-[550px]">
+              {commentsId?.length > 0 &&
+                commentsId.map((c, i) => (
+                  <div key={i} className="bg-white px-4 py-6">
+                    <div className="flex gap-3 items-center">
+                      <Image
+                        src={c.userImage}
+                        alt=""
+                        width={35}
+                        height={35}
+                        className="rounded-full"
+                      />
+                      <div className="font-medium text-lg">{c.userName}</div>
+                    </div>
+                    <div className="text-gray-600 mt-4 mb-2">{c.comment}</div>
+                    <NumberStar number={c.numberStar} />
+                    <div className="font-light text-gray-400 text-xs mt-2">
+                      {getTimeAgo(new Date(c.createdAt))}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+      )}
       <Image
         src={menuItem?.image}
         alt=""
@@ -197,7 +160,7 @@ export default function OrderPage() {
         <a href="#about">Giới thiệu</a>
         <a href="#information">Thông tin vé</a>
         <a href="#organizer">Nhà tổ chức</a>
-        <Link href="/menu">Đánh giá</Link>
+        <Link href="#comment">Đánh giá</Link>
       </div>
       <div className="flex gap-10 m-4">
         <div className="flex-1">
@@ -305,72 +268,24 @@ export default function OrderPage() {
         </div>
       </div>
       <div>
-        {!isOpen && (
-          <div className="flex gap-2 p-3 border-b text-gray-700 font-medium text-lg items-center">
-            <div onClick={() => setIsOpen((pr) => !pr)}>
-              <ChevronDown />
-            </div>
-            ĐÁNH GIÁ ({commentsId?.length})
-          </div>
-        )}
-        {isOpen && (
+        {
           <>
-            <div className="flex gap-2 p-3 border-b text-gray-700 font-medium text-lg items-center">
-              <div onClick={() => setIsOpen((pr) => !pr)}>
-                <ChevronUp />
+            <div
+              className="flex justify-between gap-2 p-5 border-b text-gray-700 font-medium text-lg items-center mr-[320px]"
+              id="comment"
+            >
+              <div>ĐÁNH GIÁ ({commentsId?.length})</div>
+              <div
+                className="hover:underline text-primary text-sm flex gap-1 items-center cursor-pointer"
+                onClick={() => setIsOpen(true)}
+              >
+                Xem tất cả
+                <Right className="w-4 h-4" />
               </div>
-              ĐÁNH GIÁ ({commentsId?.length})
             </div>
             <div>
-              {existOrder && (
-                <div className="bg-white px-8 py-6">
-                  <div className="flex gap-3 items-center">
-                    <Image
-                      src={"/user_icon.png"}
-                      alt=""
-                      width={35}
-                      height={35}
-                      className="rounded-full"
-                    />
-                    <div className="font-medium text-lg">Phú Huy</div>
-                  </div>
-                  <div className="mt-4 flex gap-2">
-                    <div className="w-[500px]">
-                      <div>Bình luận</div>
-                      <input
-                        type="text"
-                        className="w-80"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <div>Số sao</div>
-                      <select
-                        className="w-32"
-                        value={numberStar}
-                        onChange={(e) => setNumberStar(e.target.value)}
-                      >
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                      </select>
-                    </div>
-                    <button
-                      className="w-24 mb-4 mt-6"
-                      onClick={(e) => handleFormSubmit(e)}
-                    >
-                      Gửi
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div>
-              {commentsId?.length > 0 &&
-                commentsId.map((c, i) => (
+              {commentFives?.length > 0 &&
+                commentFives.map((c, i) => (
                   <div key={i} className="bg-white px-8 py-6">
                     <div className="flex gap-3 items-center">
                       <Image
@@ -391,7 +306,7 @@ export default function OrderPage() {
                 ))}
             </div>
           </>
-        )}
+        }
       </div>
     </section>
   );

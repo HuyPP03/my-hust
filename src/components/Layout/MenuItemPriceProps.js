@@ -15,7 +15,7 @@ export default function MenuItemPriceProps({
   const [isOpen, setIsOpen] = useState(false);
   function addProp() {
     setProps((oldProps) => {
-      return [...oldProps, { name: "", price: 0 }];
+      return [...oldProps, { name: "", price: 0, quantity: 0 }];
     });
   }
 
@@ -58,12 +58,21 @@ export default function MenuItemPriceProps({
                 />
               </div>
               <div>
-                <label>Extra price</label>
+                <label>Price</label>
                 <input
                   type="text"
                   placeholder="Extra price"
                   value={type.price}
                   onChange={(e) => editProp(e, index, "price")}
+                />
+              </div>
+              <div>
+                <label>Quantity</label>
+                <input
+                  type="text"
+                  placeholder="Quantity"
+                  value={type.quantity}
+                  onChange={(e) => editProp(e, index, "quantity")}
                 />
               </div>
               <div>

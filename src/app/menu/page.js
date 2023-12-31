@@ -14,6 +14,7 @@ export default function MenuPage() {
   const [count, setCount] = useState(7);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,13 +38,7 @@ export default function MenuPage() {
         const searchTerm = params.get("search");
         setSearch(searchTerm);
         // Process search term or perform other actions with the data
-        if (searchTerm && searchTerm !== "") {
-          const data = reversedMenuItems.filter((i) => {
-            return upperCase(i.name).includes(upperCase(searchTerm));
-          });
-          setMenuItems(data);
-          setCount(7);
-        }
+        searchMenu(searchTerm, reversedMenuItems);
       } catch (error) {
         console.error("Fetch Error:", error);
       }
@@ -51,6 +46,18 @@ export default function MenuPage() {
 
     fetchData();
   }, []);
+  function searchMenu(searchTerm, reversedMenuItems) {
+    if (searchTerm && searchTerm !== "") {
+      const data = reversedMenuItems.filter((i) => {
+        return upperCase(i.name).includes(upperCase(searchTerm));
+      });
+      setMenuItems(data);
+    } else {
+      setMenuItems(menu);
+      console.log(menuItems);
+    }
+    setCount(7);
+  }
   useEffect(() => {
     if (menuItems.length > count) {
       setMenuItemsRender(menuItems.slice(0, count));
@@ -61,6 +68,25 @@ export default function MenuPage() {
     setSearch("");
     // Reset menu items to the original state
     setMenuItems(menu);
+    // Reset count
+    setCount(7);
+  };
+  const handleCategorySelect = (categoryName) => {
+    // Nếu người dùng chọn "All events", reset trạng thái và hiển thị tất cả các sự kiện
+    if (categoryName === "") {
+      searchMenu(search, menu); // Reset menu items to the original state
+    } else {
+      // Nếu người dùng chọn một thể loại mới, lọc menu items tương ứng
+      searchMenu(search, menu);
+      console.log(menuItems);
+      const filteredItems = menuItems.filter((item) => {
+        return item.categories.some(
+          (category) => category.category === categoryName
+        );
+      });
+      setSelectedCategory(categoryName);
+      setMenuItems(filteredItems);
+    }
     // Reset count
     setCount(7);
   };
@@ -122,12 +148,19 @@ export default function MenuPage() {
         </div>
       </div>
       <div className="mt-8 flex gap-8 justify-center">
-        {categories.length > 0 &&
-          categories.map((c) => (
-            <div key={c._id}>
-              <button>{c.name}</button>
-            </div>
-          ))}
+        <select
+          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md w-40"
+          value={selectedCategory || ""}
+          onChange={(e) => handleCategorySelect(e.target.value)}
+        >
+          <option value="">All events</option>
+          {categories.length > 0 &&
+            categories.map((c) => (
+              <option key={c._id} value={c.name}>
+                {c.name}
+              </option>
+            ))}
+        </select>
       </div>
       {menuItemsRender.length === 0 && (
         <>
