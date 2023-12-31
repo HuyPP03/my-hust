@@ -51,7 +51,7 @@ export const Sibar = () => {
               alt="nHCM"
               className="h-6 mr-2"
             />
-            <span>Events at Ho Chi Minh city</span>
+            <span>Events in Hai Ba Trung District</span>
           </Link>
         </li>
         <li className="pt-2">
@@ -61,7 +61,7 @@ export const Sibar = () => {
               alt="HN"
               className="h-6 mr-2"
             />
-            <span>Events at Ha Noi</span>
+            <span>Events in Long Bien District</span>
           </Link>
         </li>
       </ul>

@@ -12,10 +12,20 @@ const MenuItemInMenu = ({
   categories,
   price,
   address,
+  artists,
+  types,
   index,
 }) => {
-  const addressReal = address.split(" ");
-  console.log(addressReal[addressReal.length - 1]);
+  var mes = "";
+  var i = 0;
+for (let one of categories)
+{
+i++;
+mes += ", " + (one.category) ;
+if (i === 3) break;
+}
+mes = mes.slice(2);
+
   return (
     <Link href={"/event/" + _id} className="flex flex-col justify-end">
       <div className="bg-primary/50 p-2 rounded-lg hover:bg-primary/20 hover:shadow-2xl hover: shadow-black/50 transition-all relative">
@@ -37,11 +47,11 @@ const MenuItemInMenu = ({
         <div className="flex justify-between text-sm">
           <div className="flex items-center gap-1">
             <MenuIcon className="w-4 h-4" />
-            <p className="">{categories[0].category}</p>
+            <p className="">{mes}</p>
           </div>
           <div className="flex items-center gap-1 mt-1">
             <MapIcon className="w-4 h-4" />
-            <p className="uppercase">{addressReal[addressReal.length - 1]}</p>
+            <p className="uppercase">{address}</p>
           </div>
         </div>
         {index < 10 && (
