@@ -43,6 +43,9 @@ export default function MenuPage() {
 
   const [searchResults, setSearchResults] = useState([]);
 
+
+
+
   const applyFilters = () => {
     let filteredMenuItems = [...searchResults];
 
@@ -106,22 +109,20 @@ export default function MenuPage() {
         setSearch(searchTerm);
 
         if (searchTerm && searchTerm !== "") {
-          const fuse = new Fuse(reversedMenuItems, {
-            keys: ["name"], // Specify the properties to search
+          const transformedItems = reversedMenuItems.map((item) => ({
+            ...item,
+            artistName: item.artists.map((artist) => artist.name).join(" "), // Chuyển đổi mảng nghệ sĩ thành một chuỗi
+          }));
+
+
+          const fuse = new Fuse(transformedItems, {
+            keys: ["name", "artistName"], // Specify the properties to search
           });
       
           const result = fuse.search(searchTerm);
       
           setSearchResults(result.map((item) => item.item));
           setCount(7);
-          
-          /*
-          const data = reversedMenuItems.filter((i) => {
-            return upperCase(i.name).includes(upperCase(searchTerm));
-          });
-          setSearchResults(data);
-          setCount(7); 
-          */
         }
       } catch (error) {
         console.error("Fetch Error:", error);

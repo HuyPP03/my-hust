@@ -11,8 +11,6 @@ const MenuItemInMenu = ({
   date,
   categories,
   price,
-  artists,
-  types,
   address,
   artists,
   types,
@@ -24,9 +22,35 @@ for (let one of categories)
 {
 i++;
 mes += ", " + (one.category) ;
-if (i === 3) break;
+if (i === 3)
+{
+  mes += "...";
+  break;
+};
 }
 mes = mes.slice(2);
+
+
+var mes1 = "";
+var i1 = 0;
+for (let one of artists)
+{
+i1++;
+mes1+= ", " + (one.name) ;
+if (i1 === 3)
+{
+  mes1 += "...";
+  break;
+};
+}
+mes1 = mes1.slice(2);
+
+let total = 0;
+for (let one of types)
+{
+  total += one.quantity;
+}
+
 
   return (
     <Link href={"/event/" + _id} className="flex flex-col justify-end">
@@ -38,7 +62,10 @@ mes = mes.slice(2);
           width={300}
           height={300}
         />
-        <h1 className="font-semibold text-lg uppercase mt-8">{name}</h1>
+        <h1 className="font-bold text-lg uppercase mt-3">{name}</h1>
+        <h2 style={{ fontSize: 'smaller' }} className="font-semibold text-lg uppercase mt">
+  {mes1}
+</h2>
         <div className="flex justify-between text-sm items-center">
           <span className="h-5">From {price} VND</span>
           <div className="flex items-center gap-1 mt-1">
@@ -63,6 +90,12 @@ mes = mes.slice(2);
             </span>
           </span>
         )}
+        {total === 0 && (
+          <div className="font-semibold absolute top-40 right-0 bg-red-800 text-white p-2 rounded-bl-md">
+              SOLD OUT
+            </div>
+        )}
+
       </div>
     </Link>
   );
