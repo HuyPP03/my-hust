@@ -130,7 +130,6 @@ export default function MenuPage() {
 
     fetchData();
   }, []);
-
   useEffect(() => {
     if (searchResults.length > count) {
       setMenuItemsRender(searchResults.slice(0, count));

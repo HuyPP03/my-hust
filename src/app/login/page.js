@@ -10,12 +10,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
-
-  const handleForgotPassword = () => {
-    // Chuyển hướng đến trang quên mật khẩu
-    router.push("/forgotpassword");
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -58,14 +52,12 @@ export default function Login() {
             </div>
           )}
 
-          {/* Nút quên mật khẩu
-          <button
-            type="button"
-            onClick={handleForgotPassword}
+          <Link
+            href={"/forgot-password"}
             className="text-sm text-primary mt-2 cursor-pointer"
           >
             Forgot Password?
-          </button> */}
+          </Link>
 
           <Link className="text-sm mt-3 text-right" href={"/register"}>
             Don&apos;t have an account?{" "}

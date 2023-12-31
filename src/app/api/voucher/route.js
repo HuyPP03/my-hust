@@ -1,22 +1,12 @@
 import { connectMongoDB } from "@/libs/mongodb";
-import { Order } from "@/models/Order";
+import { Voucher } from "@/models/Voucher";
 
 export async function POST(req) {
   try {
     connectMongoDB();
     const data = await req.json();
-    const orderDoc = await Order.create(data);
-    return Response.json(orderDoc);
-  } catch (error) {
-    console.log(error);
-  }
-}
-export async function PUT(req) {
-  try {
-    connectMongoDB();
-    const { _id, ...data } = await req.json();
-    const orderDoc = await Order.findByIdAndUpdate(_id, data);
-    return Response.json(orderDoc);
+    const voucherDoc = await Voucher.create(data);
+    return Response.json(voucherDoc);
   } catch (error) {
     console.log(error);
   }
@@ -24,9 +14,20 @@ export async function PUT(req) {
 export async function GET(req) {
   try {
     connectMongoDB();
-    return Response.json(await Order.find());
+    return Response.json(await Voucher.find());
   } catch (err) {
     return Response.json({ message: "An error." }, { status: 500 });
+  }
+}
+
+export async function PUT(req) {
+  try {
+    connectMongoDB();
+    const { _id, ...data } = await req.json();
+    const voucherDoc = await Voucher.findByIdAndUpdate(_id, data);
+    return Response.json(voucherDoc);
+  } catch (error) {
+    console.log(error);
   }
 }
 export async function DELETE(req) {
@@ -35,7 +36,7 @@ export async function DELETE(req) {
 
     const url = new URL(req.url);
     const _id = url.searchParams.get("_id");
-    await Order.deleteOne({ _id });
+    await Voucher.deleteOne({ _id });
     return Response.json(true);
   } catch (error) {
     console.log(error);

@@ -11,6 +11,8 @@ const MenuItemInMenu = ({
   date,
   categories,
   price,
+  artists,
+  types,
   address,
   artists,
   types,

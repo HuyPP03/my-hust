@@ -3,6 +3,7 @@ const { Schema, models, model, default: mongoose } = require("mongoose");
 const ExtraPriceSchema = new Schema({
   name: String,
   price: Number,
+  quantity: Number,
 });
 const ArtistSchema = new Schema({
   name: String,

@@ -6,6 +6,15 @@ const OrderSchema = new Schema(
     userEmail: String,
     phone: String,
     cartProducts: Object,
+    sum: Number,
+    discount: {
+      type: Number,
+      default: 0,
+    },
+    evaluate: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

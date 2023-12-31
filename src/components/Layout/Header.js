@@ -3,10 +3,10 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import Tippy from "@tippyjs/react/headless";
 import Image from "next/image";
-import LogoutPage from "./Logout";
-import LogoutButton from "./Logout";
+import { useState } from "react";
 export function Header() {
   const { data: session, status, update } = useSession();
+  const [showConfirm, setShowConfirm] = useState(false);
   let userName = session?.user.name || session?.user.email;
   const userEmail = session?.user.email;
   const userAvatar = session?.user.image;
@@ -16,6 +16,30 @@ export function Header() {
 
   return (
     <header className="grid items-center grid-cols-4 py-6 border-b-2 sticky top-0 bg-white z-50">
+      {showConfirm && (
+        <div className="fixed h-screen w-screen top-0 left-0 z-[999999999]">
+          <div className="bg-white/60 inset-0 flex items-center h-full justify-center">
+            <div className="bg-white p-4 rounded-lg">
+              <div>Are you sure you want to logout?</div>
+              <div className="flex gap-2 mt-1">
+                <button type="button" onClick={() => setShowConfirm(false)}>
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="primary"
+                  onClick={() => {
+                    signOut();
+                    setShowConfirm(false);
+                  }}
+                >
+                  Yes,&nbsp;Logout!
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <Link className="text-primary font-semibold text-2xl" href="/">
         HUSTENTERTAINMENT
       </Link>
@@ -88,7 +112,34 @@ export function Header() {
                     />
                     Profile
                   </Link>
-                  <LogoutButton />
+                  <Link
+                    href="/history"
+                    className="flex items-center gap-2 font-medium text-slate-700 py-2 border-b-2"
+                  >
+                    <Image
+                      src={"/history.jpg"}
+                      alt={""}
+                      width={20}
+                      height={20}
+                      className="w-5"
+                    />
+                    History
+                  </Link>
+                  <div>
+                    <div
+                      onClick={() => setShowConfirm(true)}
+                      className="flex items-center gap-2 cursor-pointer font-medium text-slate-700 py-2 border-b-2"
+                    >
+                      <Image
+                        src={"/logout.png"}
+                        alt={""}
+                        width={20}
+                        height={20}
+                        className="w-5"
+                      />
+                      Log Out
+                    </div>
+                  </div>
                 </div>
               )}
               trigger="click"
