@@ -63,7 +63,7 @@ export default function VoucherForm({ onSubmit, voucher }) {
           <div className="grow">
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label>Mã voucher</label>
+                <label>Voucher code</label>
                 <input
                   type="text"
                   value={voucherCode}
@@ -71,7 +71,7 @@ export default function VoucherForm({ onSubmit, voucher }) {
                 ></input>
               </div>
               <div>
-                <label>Tên voucher</label>
+                <label>Voucher name</label>
                 <input
                   type="text"
                   value={name}
@@ -81,7 +81,7 @@ export default function VoucherForm({ onSubmit, voucher }) {
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label>Nhập fromTime</label>
+                <label>Enter from time</label>
                 <input
                   type="date"
                   onChange={(e) => setFromTime(e.target.value)}
@@ -98,7 +98,7 @@ export default function VoucherForm({ onSubmit, voucher }) {
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label>Nhập toTime</label>
+                <label>Enter to time</label>
                 <input
                   type="date"
                   onChange={(e) => setToTime(e.target.value)}

@@ -32,15 +32,15 @@ export default function MenuItemsPage() {
       <UserTabs isAdmin={data.admin} />
       <div className="mt-8">
         <Link className="button flex" href={"/menu-items/new"}>
-          <span>Create new menu item</span>
+          <span>Create new concert</span>
           <Right />
         </Link>
       </div>
       <h1 className="text-center text-primary text-4xl pt-10 font-semibold italic p-4">
-        Existing concert
+        Existing concerts
       </h1>
       <div>
-        <h2 className="text-sm text-gray-500 mt-4">Edit menu item</h2>
+        <h2 className="text-sm text-gray-500 mt-4">Edit concert</h2>
         <div className="grid grid-cols-3 gap-2">
           {menuItemsRender?.length > 0 &&
             menuItemsRender.map((item) => (

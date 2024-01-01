@@ -1,5 +1,3 @@
-"use client";
-
 // pages/resetpassword.js
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -28,21 +26,21 @@ const ResetPassword = () => {
 
   return (
     <div>
-      <h1>Đặt Lại Mật Khẩu</h1>
+      <h1>Reset Password</h1>
       <form onSubmit={handleSubmit}>
-        <label>Mật Khẩu Mới:</label>
+        <label>New Password:</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <label>Xác Nhận Mật Khẩu:</label>
+        <label>Confirm Password:</label>
         <input
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <button type="submit">Đặt Lại Mật Khẩu</button>
+        <button type="submit">Reset Password</button>
       </form>
       <p>{message}</p>
     </div>

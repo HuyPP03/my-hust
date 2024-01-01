@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useProfile } from "@/components/Layout/UseProfile";
@@ -129,19 +127,19 @@ export default function EditMenuItemPage() {
                   setSumAndDiscount({ sum: 0, discount: 0 });
                 }}
               >
-                <span>Đóng</span>
+                <span>Close</span>
                 <Close />
               </div>
               <div className="text-2xl text-gray-700 font-semibold mb-4 ml-6">
-                Thống kê
+                Statistics
               </div>
             </div>
             <div className="ml-6 my-1 overflow-y-scroll max-h-[550px]">
               {types.length > 0 && (
                 <div>
                   <div className="pb-8 pt-4 text-gray-500 font-medium grid grid-cols-2">
-                    <div>Loại vé</div>
-                    <div className="flex justify-end">Số lượng</div>
+                    <div>Ticket Type</div>
+                    <div className="flex justify-end">Quantity</div>
                   </div>
                   {types.map((o, index) => (
                     <div
@@ -161,13 +159,13 @@ export default function EditMenuItemPage() {
                     </div>
                   ))}
                   <div className="text-gray-500 font-medium text-lg">
-                    Tổng số vé đã bán: {quantity}
+                    Total tickets sold: {quantity}
                   </div>
                   <div className="text-gray-500 font-medium text-lg">
-                    Tổng tiền ban đầu: {sumAndDiscount.sum}
+                    Initial total amount: {sumAndDiscount.sum}
                   </div>
                   <div className="text-gray-500 font-medium text-lg mb-8">
-                    Tổng tiền giảm giá: {sumAndDiscount.discount}
+                    Total discount amount: {sumAndDiscount.discount}
                   </div>
                 </div>
               )}
@@ -179,7 +177,7 @@ export default function EditMenuItemPage() {
       <div className="mt-8 max-w-2xl mx-auto">
         <Link className="button" href={"/menu-items"}>
           <Left />
-          <span>Show all menu items</span>
+          <span>Show all concerts</span>
         </Link>
       </div>
       <h1 className="text-center text-primary text-4xl pt-10 font-semibold italic p-4">
@@ -201,7 +199,7 @@ export default function EditMenuItemPage() {
                   handleClick();
                 }}
               >
-                Thống kê doanh thu
+                Revenue Statistics
               </button>
             </div>
           </div>

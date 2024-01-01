@@ -22,6 +22,7 @@ export default function Page() {
       });
     });
   }, []);
+
   useEffect(() => {
     if (order) {
       fetch("/api/menu-items").then((response) => {
@@ -33,11 +34,12 @@ export default function Page() {
       sendMail(order._id, order.userEmail);
     }
   }, [order]);
+
   async function sendMail(id, email) {
     const res = await fetch("/api/sendQR", {
       method: "POST",
       headers: {
-        "Context-Type": "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ id, email }),
     });
@@ -47,19 +49,20 @@ export default function Page() {
   const getFormattedDay = () => {
     const date = new Date(menuItem?.date);
     const daysOfWeek = [
-      "Chủ Nhật",
-      "Thứ 2",
-      "Thứ 3",
-      "Thứ 4",
-      "Thứ 5",
-      "Thứ 6",
-      "Thứ 7",
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
     ];
     const dayIndex = date?.getDay();
     return daysOfWeek[dayIndex];
   };
+
   return (
-    <secction>
+    <section>
       <div className="flex py-4 gap-6 px-12 text-white bg-gradient-to-r from-slate-700 to-blue-900">
         <div className="flex-1">
           <div className="text-3xl font-medium my-4">
@@ -68,7 +71,8 @@ export default function Page() {
           <div className="flex items-center gap-2 font-medium text-lg">
             <Clock className="w-5 h-5" />
             <div>
-              {getFormattedDay()}, {date.getDate()} Tháng {date.getMonth() + 1}{" "}
+              {getFormattedDay()}, {date.getDate()}{" "}
+              {date.toLocaleString("default", { month: "long" })}{" "}
               {date.getFullYear()}
             </div>
             <div>({menuItem?.time})</div>
@@ -81,21 +85,21 @@ export default function Page() {
       </div>
       <div className="grid grid-cols-3 bg-white">
         <div className="flex justify-center border py-2 font-medium text-gray-600">
-          <Link href={"/order/" + id}>Chọn vé</Link>
+          <Link href={"/order/" + id}>Select Ticket</Link>
         </div>
         <div className="flex justify-center border py-2 text-gray-600 font-medium">
-          Thanh toán
+          Pay
         </div>
         <div className="flex justify-center border py-2 text-green-600 font-semibold">
-          Hoàn tất
+          Completed
         </div>
       </div>
       <div className="text-primary font-semibold text-3xl flex justify-center mt-10">
-        Mã QR bạn đã đặt vé
+        QR Code for Your Ticket Reservation
       </div>
       <div className="flex justify-center m-10">
         {order && <QRCode value={JSON.stringify(order._id)} size={400} />}
       </div>
-    </secction>
+    </section>
   );
 }

@@ -46,7 +46,7 @@ export default function NewMenuItemPage() {
       <div className="mt-8 max-w-2xl mx-auto">
         <Link className="button" href={"/menu-items"}>
           <Left />
-          <span>Show all menu items</span>
+          <span>Show all concerts</span>
         </Link>
       </div>
       <h1 className="text-center text-primary text-4xl pt-10 font-semibold italic p-4">

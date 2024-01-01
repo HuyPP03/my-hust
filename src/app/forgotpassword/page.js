@@ -26,7 +26,7 @@ const ForgotPassword = () => {
 
   return (
     <div>
-      <h1>Quên Mật Khẩu</h1>
+      <h1>Forgot Password</h1>
       <form onSubmit={handleSubmit}>
         <label>Email:</label>
         <input
@@ -34,7 +34,7 @@ const ForgotPassword = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <button type="submit">Gửi Yêu Cầu</button>
+        <button type="submit">Send Request</button>
       </form>
       <p>{message}</p>
     </div>

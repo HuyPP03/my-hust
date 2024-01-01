@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/app/Providers";
+
 export default function OrderPage() {
   const { id } = useParams();
   const { cartProducts } = useContext(CartContext);
@@ -19,6 +20,7 @@ export default function OrderPage() {
   const [sum, setSum] = useState(0);
   const { addToCart } = useContext(CartContext);
   const date = new Date(menuItem?.date);
+
   useEffect(() => {
     setLoading(true);
     fetch("/api/menu-items").then((res) => {
@@ -46,6 +48,7 @@ export default function OrderPage() {
       });
     });
   }, []);
+
   const handleQuantityChange = (index, increment, quantity) => {
     setOrder((prevOrder) => {
       const updatedOrder = [...prevOrder];
@@ -58,34 +61,38 @@ export default function OrderPage() {
       return updatedOrder;
     });
   };
+
   useEffect(() => {
     setOrderItem(order.filter((o) => o.quantity > 0));
   }, [order]);
+
   useEffect(() => {
-    // Tính tổng giá trị từ orderItem
+    // Calculate the total value from orderItem
     const total = orderItem.reduce((acc, item) => {
       return acc + item.quantity * item.price;
     }, 0);
     addToCart(orderItem);
-    // Cập nhật giá trị của sum
+    // Update the value of sum
     setSum(total);
   }, [orderItem]);
 
   const getFormattedDay = () => {
     const date = new Date(menuItem?.date);
     const daysOfWeek = [
-      "Chủ Nhật",
-      "Thứ 2",
-      "Thứ 3",
-      "Thứ 4",
-      "Thứ 5",
-      "Thứ 6",
-      "Thứ 7",
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
     ];
     const dayIndex = date?.getDay();
     return daysOfWeek[dayIndex];
   };
+
   if (loading) return "Loading...";
+
   return (
     <section className="bg-gray-100">
       <div className="flex py-4 gap-6 px-12 text-white bg-gradient-to-r from-slate-700 to-blue-900">
@@ -96,8 +103,7 @@ export default function OrderPage() {
           <div className="flex items-center gap-2 font-medium text-lg">
             <Clock className="w-5 h-5" />
             <div>
-              {getFormattedDay()}, {date.getDate()} Tháng {date.getMonth() + 1}{" "}
-              {date.getFullYear()}
+              {getFormattedDay()}, {date.getDate()} {date.toLocaleString('en-US', { month: 'long' })} {date.getFullYear()}
             </div>
             <div>({menuItem?.time})</div>
           </div>
@@ -109,21 +115,21 @@ export default function OrderPage() {
       </div>
       <div className="grid grid-cols-3 bg-white">
         <div className="flex justify-center border py-2 font-semibold text-green-600">
-          Chọn vé
+          Select Tickets
         </div>
         <div className="flex justify-center border py-2 text-gray-600 font-medium">
-          Thanh toán
+          Pay
         </div>
         <div className="flex justify-center border py-2 text-gray-600 font-medium">
-          Hoàn tất
+          Complete
         </div>
       </div>
       <div className="flex mt-8 ml-8 gap-8">
         <div className="flex-1">
           <div className="border-b-4 pb-2 pt-4 grid grid-cols-4 font-medium text-gray-600">
-            <div className="col-span-2">LOẠI VÉ</div>
-            <div className="flex justify-end">GIÁ VÉ</div>
-            <div className="flex justify-end">SỐ LƯỢNG</div>
+            <div className="col-span-2">TICKET TYPE</div>
+            <div className="flex justify-end">TICKET PRICE</div>
+            <div className="flex justify-end">QUANTITY</div>
           </div>
           {menuItem?.types.length > 0 &&
             menuItem?.types.map((type, index) => (
@@ -135,13 +141,13 @@ export default function OrderPage() {
                   {type?.name}
                   {type?.quantity <= 0 && (
                     <span className="text-primary font-semibold text-bg">
-                      Hết vé
+                      Sold Out
                     </span>
                   )}
                   {order[index]?.quantity === type?.quantity &&
                     type?.quantity > 0 && (
                       <span className="text-primary font-semibold text-bg">
-                        Đã đến số lượng tối đa
+                        Maximum quantity reached
                       </span>
                     )}
                 </div>
@@ -186,13 +192,13 @@ export default function OrderPage() {
           <div>
             <div className="w-80 bg-white px-6">
               <div className="pb-2 pt-4 border-b-4 font-semibold text-gray-700">
-                THÔNG TIN ĐẶT VÉ
+                TICKET INFORMATION
               </div>
               {orderItem.length > 0 && (
                 <div>
                   <div className="pb-8 pt-4 text-gray-500 font-medium grid grid-cols-2">
-                    <div>Loại vé</div>
-                    <div className="flex justify-end">Số lượng</div>
+                    <div>Ticket Type</div>
+                    <div className="flex justify-end">Quantity</div>
                   </div>
                   {orderItem.map((o, index) => (
                     <div
@@ -215,12 +221,12 @@ export default function OrderPage() {
               )}
               {orderItem.length === 0 && (
                 <div className="pb-8 pt-4 text-gray-500 text-sm">
-                  Vui lòng chọn vé...
+                  Please select tickets...
                 </div>
               )}
             </div>
             <div className="flex justify-between bg-orange-900 text-white px-6 py-4 font-medium">
-              <div>Tổng cộng</div>
+              <div>Total</div>
               <div>{sum} VND</div>
             </div>
           </div>
@@ -230,7 +236,7 @@ export default function OrderPage() {
             }
             className="mt-8 p-4 flex justify-center bg-green-600 text-white font-semibold text-lg"
           >
-            Tiếp tục
+            Continue
           </Link>
         </div>
       </div>

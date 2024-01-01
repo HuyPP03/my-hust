@@ -181,13 +181,13 @@ export default function Step2Page() {
   const getFormattedDay = () => {
     const date = new Date(menuItem?.date);
     const daysOfWeek = [
-      "Chủ Nhật",
-      "Thứ 2",
-      "Thứ 3",
-      "Thứ 4",
-      "Thứ 5",
-      "Thứ 6",
-      "Thứ 7",
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
     ];
     const dayIndex = date?.getDay();
     return daysOfWeek[dayIndex];
@@ -208,7 +208,7 @@ export default function Step2Page() {
                 className="bg-primary w-fit flex px-3 py-1 text-white h-fit cursor-pointer items-end ml-auto"
                 onClick={() => setIsOpenVouchers(false)}
               >
-                <span>Đóng</span>
+                <span>Close</span>
                 <Close />
               </div>
               <div className="text-2xl text-gray-700 font-semibold mb-4 ml-6">
@@ -227,22 +227,22 @@ export default function Step2Page() {
                     </div>
                     <div className="text-sm flex flex-col gap-1">
                       <div className="text-primary">
-                        <span>Giảm giá: </span>
+                        <span>Discount: </span>
                         {voucher.percent > 0
                           ? voucher.percent + "%"
                           : voucher.amountMoney + "đ"}
-                        <span> - Mã: </span>
+                        <span> - Code: </span>
                         {voucher.voucherCode}
                       </div>
                       <div>
-                        Thời gian áp dụng:{" "}
+                        Applicable date:{" "}
                         {DatePage(voucher.fromTime) +
                           " - " +
                           DatePage(voucher.toTime)}
                       </div>
-                      <div>HSD: {DatePage(voucher.toTime) + " 23:59"}</div>
-                      <div>Số lượng voucher còn lại: {voucher.quantity}</div>
-                      <span>Số lượng ưu đãi có hạn</span>
+                      <div>Expiration date: {DatePage(voucher.toTime) + " 23:59"}</div>
+                      <div>Remaining number of vouchers: {voucher.quantity}</div>
+                      <span>Quantity of discount is limited</span>
                     </div>
                   </div>
                 ))}
@@ -271,23 +271,23 @@ export default function Step2Page() {
       </div>
       <div className="grid grid-cols-3 bg-white">
         <div className="flex justify-center border py-2 font-medium text-gray-600">
-          <Link href={"/order/" + id}>Chọn vé</Link>
+          <Link href={"/order/" + id}>Select ticket</Link>
         </div>
         <div className="flex justify-center border py-2 text-green-600 font-semibold">
-          Thanh toán
+          Pay
         </div>
         <div className="flex justify-center border py-2 text-gray-600 font-medium">
-          Hoàn tất
+          Complete
         </div>
       </div>
       <div className="flex mt-8 ml-8 gap-8">
         <div className="flex-1">
           <div className="pb-2 pt-4 border-b-4 font-semibold text-gray-500">
-            THÔNG TIN NGƯỜI NHẬN VÉ
+            TICKET RECEIVER INFORMATION
           </div>
           <div className="grid grid-cols-2 gap-4 mt-4">
             <div>
-              <div>Họ tên</div>
+              <div>Full name</div>
               <input
                 type="text"
                 value={user?.name}
@@ -310,7 +310,7 @@ export default function Step2Page() {
               />
             </div>
             <div>
-              <div>Số điện thoại</div>
+              <div>Phone number</div>
               <input
                 type="tel"
                 value={user?.phone}
@@ -323,7 +323,7 @@ export default function Step2Page() {
               />
             </div>
             <div>
-              <div>Địa chỉ</div>
+              <div>Address</div>
               <input
                 type="text"
                 value={user?.address}
@@ -337,21 +337,21 @@ export default function Step2Page() {
             </div>
           </div>
           <div className="pb-2 pt-4 border-b-4 font-semibold text-gray-500">
-            HÌNH THỨC THANH TOÁN
+            PAYMENT METHOD
           </div>
           <div className="pb-2 pt-4 font-semibold text-gray-500">
-            THANH TOÁN TRỰC TUYẾN
+            ONLINE PAYMENT
           </div>
         </div>
         <div>
           <div>
             <div className="w-80 bg-white px-6">
               <div className="pb-2 pt-4 border-b-4 font-semibold text-gray-700">
-                THÔNG TIN NGƯỜI NHẬN VÉ
+              TICKET RECEIVER INFORMATION
               </div>
 
               <div className="py-4 text-gray-500 grid grid-cols-2 border-t border-dashed">
-                <div>Họ tên</div>
+                <div>Full name</div>
                 <div className="flex justify-end">{session?.user?.name}</div>
               </div>
               <div className="py-4 text-gray-500 grid grid-cols-2 border-t border-dashed">
@@ -359,15 +359,15 @@ export default function Step2Page() {
                 <div className="flex justify-end">{session?.user?.email}</div>
               </div>
               <div className="py-4 text-gray-500 grid grid-cols-2 border-t border-dashed">
-                <div>Điện thoại</div>
+                <div>Phone number</div>
                 <div className="flex justify-end"></div>
               </div>
               <div className="pb-2 pt-4 border-b-4 font-semibold text-gray-700">
-                HÌNH THỨC THANH TOÁN
+               PAYMENT METHOD
               </div>
               <div className="pt-4 text-gray-500 font-medium">Momo</div>
               <div className="pb-2 pt-4 border-b-4 font-semibold text-gray-700 flex justify-between">
-                <div>THÔNG TIN ĐẶT VÉ</div>
+                <div>TICKET BUYING INFORMATION</div>
                 <Link href={"/order/" + id} onClick={() => addToCart(order)}>
                   Sửa
                 </Link>
@@ -375,8 +375,8 @@ export default function Step2Page() {
               {order.length > 0 && (
                 <div>
                   <div className="pb-8 pt-4 text-gray-500 font-medium grid grid-cols-2">
-                    <div>Loại vé</div>
-                    <div className="flex justify-end">Số lượng</div>
+                    <div>Type</div>
+                    <div className="flex justify-end">Quantity</div>
                   </div>
                   {order.map((o, index) => (
                     <div
@@ -399,7 +399,7 @@ export default function Step2Page() {
                     <div>
                       <div className="pb-2 pt-4 text-gray-500 font-medium grid grid-cols-2">
                         <div>Voucher</div>
-                        <div className="flex justify-end">Giảm</div>
+                        <div className="flex justify-end">Discount</div>
                       </div>
                       <div className="pb-8 text-gray-500 font-normal text-xs grid grid-cols-2">
                         <div>{selectedVoucher.name}</div>
@@ -416,7 +416,7 @@ export default function Step2Page() {
             <div className="py-8 mt-4 text-gray-500 font-medium bg-white px-6">
               <div className="flex justify-between">
                 <div className="flex gap-2">
-                  <div> Chọn Voucher ({vouchers.length})</div>
+                  <div> Select voucher ({vouchers.length})</div>
                   {isOpenVoucher && (
                     <div onClick={() => setIsOpenVoucher(false)}>
                       <ChevronUp />
@@ -432,7 +432,7 @@ export default function Step2Page() {
                   className="flex gap-2 text-primary text-[14px] items-center hover:underline cursor-pointer"
                   onClick={() => setIsOpenVouchers(true)}
                 >
-                  <span>Xem tất cả</span>
+                  <span>All</span>
                   <Right className="w-4 h-4" />
                 </div>
               </div>
@@ -473,7 +473,7 @@ export default function Step2Page() {
               )}
             </div>
             <div className="flex justify-between bg-orange-900 text-white px-6 py-4 font-medium">
-              <div>Tổng cộng</div>
+              <div>Total</div>
               <div>
                 {selectedVoucher === null
                   ? sum
@@ -486,7 +486,7 @@ export default function Step2Page() {
             className="mt-8 p-4 flex justify-center bg-green-600 text-white font-semibold text-lg rounded-none"
             onClick={(e) => handleFormSubmit(e)}
           >
-            Thanh toán
+            Pay
           </button>
         </div>
       </div>

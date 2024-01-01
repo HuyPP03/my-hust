@@ -62,16 +62,35 @@ export default function OrderPage() {
   const getFormattedDay = () => {
     const date = new Date(menuItem?.date);
     const daysOfWeek = [
-      "Chủ Nhật",
-      "Thứ 2",
-      "Thứ 3",
-      "Thứ 4",
-      "Thứ 5",
-      "Thứ 6",
-      "Thứ 7",
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
     ];
     const dayIndex = date?.getDay();
     return daysOfWeek[dayIndex];
+  };
+  const getFormattedMonth = () => {
+    const date = new Date(menuItem?.date);
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const monthIndex = date?.getMonth();
+    return months[monthIndex];
   };
   if (loading) return "Loading...";
   return (
@@ -84,11 +103,11 @@ export default function OrderPage() {
                 className="bg-primary w-fit flex px-3 py-1 text-white h-fit cursor-pointer items-end ml-auto"
                 onClick={() => setIsOpen(false)}
               >
-                <span>Đóng</span>
+                <span>Close</span>
                 <Close />
               </div>
               <div className="text-2xl text-gray-700 font-semibold mb-4 ml-6">
-                Đánh giá
+                Comment
               </div>
             </div>
             <div className="ml-6 my-1 overflow-y-scroll h-[550px]">
@@ -126,7 +145,7 @@ export default function OrderPage() {
       <div className="flex pt-5 gap-6 pb-12 px-4 bg-white">
         <div className="w-24  flex flex-col items-center justify-center text-center border border-b-[5px] border-gray-300 h-28">
           <div className="w-full bg-primary text-white font-semibold">
-            Tháng {date.getMonth() + 1}
+          {getFormattedMonth()}
           </div>
           <div className="text-6xl text-gray-500">{date.getDate()}</div>
           <div className="text-sm text-gray-500">{getFormattedDay()}</div>
@@ -138,7 +157,7 @@ export default function OrderPage() {
           <div className="flex items-center gap-2 font-medium text-lg my-1">
             <Clock className="w-5 h-5" />
             <div>
-              {getFormattedDay()}, {date.getDate()} Tháng {date.getMonth() + 1}{" "}
+            {getFormattedDay()}, {date.getDate()}{"/"}{date.getMonth() + 1}{"/"}
               {date.getFullYear()}
             </div>
             <div>({menuItem?.time})</div>
@@ -153,51 +172,39 @@ export default function OrderPage() {
             sum > 0 ? (
               <Link
                 href={"/order/" + id}
-                className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center"
+                className="flex py-4 bg-primary text-white font-medium text-2xl items-center justify-center"
               >
-                Mua vé ngay
+                ORDER NOW
               </Link>
             ) : (
-              <div className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center">
-                Hết vé
+              <div className="flex py-4 bg-primary text-white font-medium text-2xl items-center justify-center">
+                SOLD OUT
               </div>
             )
           ) : (
-            <div className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center">
-              Đã diễn ra
+            <div className="flex py-4 bg-primary text-white font-medium text-2xl items-center justify-center">
+               END
             </div>
           )}
-          <div className="flex w-full mt-2">
-            <div className="flex-1 flex justify-center p-1 border">Chia sẻ</div>
-            <div className="flex-1 flex justify-center p-1 border">
-              Quan tâm
-            </div>
-          </div>
-
-          <span className="flex justify-center mt-2 text-gray-400 text-sm">
-            --- Người quan tâm
-          </span>
         </div>
       </div>
       <div className=" bg-white py-2 flex gap-8 px-8 border text-gray-700 font-medium">
-        <a href="#about">Giới thiệu</a>
-        <a href="#information">Thông tin vé</a>
-        <a href="#organizer">Nhà tổ chức</a>
-        <Link href="#comment">Đánh giá</Link>
+        <a href="#about">Introduction</a>
+        <a href="#information">Ticket</a>
+        <a href="#organizer">Management</a>
+        <Link href="#comment">Comment</Link>
       </div>
       <div className="flex gap-10 m-4">
         <div className="flex-1">
           <div className="bg-white border-2 border-gray-400 mb-4" id="about">
             <div className="p-3 border-b text-gray-700 font-medium text-lg">
-              GIỚI THIỆU
+            INTRODUCTION
             </div>
             <div className="flex justify-center text-2xl font-medium mt-4">
-              {upperCase(menuItem?.name)}
             </div>
             <div className="mx-4 my-2">{menuItem?.description}</div>
             <div className="italic font-medium flex justify-center mb-3">
-              Quý Khách sẽ được gửi thông tin số ghế và xác nhận đặt chỗ thành
-              công!
+            After successful payment, we will send the QR code of the tickets to your register email!
             </div>
           </div>
           <div
@@ -205,7 +212,7 @@ export default function OrderPage() {
             id="information"
           >
             <div className="p-3 border-b text-gray-700 font-medium text-lg">
-              THÔNG TIN VÉ
+              TICKET INFORMATION
             </div>
             {menuItem?.types.length > 0 &&
               menuItem?.types?.map((item, index) => (
@@ -225,7 +232,7 @@ export default function OrderPage() {
             id="organizer"
           >
             <div className="p-3 border-b text-gray-700 font-medium text-lg">
-              NHÀ TỔ CHỨC
+              MANAGEMENT
             </div>
             {menuItem?.managements?.length > 0 &&
               menuItem?.managements?.map((management, index) => (
@@ -276,30 +283,6 @@ export default function OrderPage() {
             <Money className="w-4 h-4" />
             From {menuItem?.price} VND
           </div>
-          {currentDate < date ? (
-            sum > 0 ? (
-              <Link
-                href={"/order/" + id}
-                className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center"
-              >
-                Mua vé ngay
-              </Link>
-            ) : (
-              <div className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center">
-                Hết vé
-              </div>
-            )
-          ) : (
-            <div className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center">
-              Đã diễn ra
-            </div>
-          )}
-          <div className="flex w-full mt-2">
-            <div className="flex-1 flex justify-center p-1 border">Chia sẻ</div>
-            <div className="flex-1 flex justify-center p-1 border">
-              Quan tâm
-            </div>
-          </div>
         </div>
       </div>
       <div>
@@ -309,12 +292,12 @@ export default function OrderPage() {
               className="flex justify-between gap-2 p-5 border-b text-gray-700 font-medium text-lg items-center mr-[320px]"
               id="comment"
             >
-              <div>ĐÁNH GIÁ ({commentsId?.length})</div>
+              <div>COMMENT ({commentsId?.length})</div>
               <div
                 className="hover:underline text-primary text-sm flex gap-1 items-center cursor-pointer"
                 onClick={() => setIsOpen(true)}
               >
-                Xem tất cả
+                More
                 <Right className="w-4 h-4" />
               </div>
             </div>

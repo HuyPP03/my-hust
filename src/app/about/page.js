@@ -9,7 +9,7 @@ export default function about() {
           HUSTENTERTAINMENT INFORMATION
         </h1>
         <p className="p-2 text-gray-500">
-          Ticketbox is a ticket management and distribution system that helps
+          HUSTENTERTAINMENT is a ticket management and distribution system that helps
           you easily buy and sell event tickets
         </p>
         <div className="grid grid-cols-3 gap-8 pt-4">
@@ -24,12 +24,9 @@ export default function about() {
             </div>
             <h2 className="font-semibold py-2">INTRODUCTION</h2>
             <p className="text-gray-500">
-              Established in 2013, Ticketbox is the first online event ticket
-              distribution platform in Vietnam. We have cooperated with numerous
-              event organizers and top-notch large-scale programs. The
-              successful events sold through Ticketbox include Super Show 9,
-              Concert Ha Anh Tuan, Idecaf theater, TEDx, Tech In Asia, WeChoice
-              Awards, Forbes Vietnam, Miss Vietnam, DJ Hardwell, and more.
+            HUSTENTERTAINMENT is a cutting-edge web application designed and developed as a major project by 
+            a group of talented students from Hanoi University of Science and Technology (HUST). This innovative platform caters
+            to music enthusiasts, offering a seamless and convenient way to book tickets for live music concerts.
             </p>
           </div>
           <div>
@@ -44,7 +41,7 @@ export default function about() {
             </div>
             <h2 className="font-semibold py-2">MISSION</h2>
             <p className="text-gray-500">
-              Ticketbox is constantly improving to assert its pioneering
+              HUSTENTERTAINMENT is constantly improving to assert its pioneering
               position in the event ticket distribution industry in Vietnam.
               With our understanding of technology and the market, we aspire to
               contribute to the development of the Vietnamese event industry, to
@@ -59,7 +56,7 @@ export default function about() {
             <h2 className="font-semibold py-2">CORE VALUES</h2>
             <p className="text-gray-500">
               To us, the value of a business is its contribution to making
-              society better. Ticketbox is operated by passionate and
+              society better. HUSTENTERTAINMENT is operated by passionate and
               enthusiastic young people who are eager to make buying and selling
               tickets easier and more convenient for both event organizers and
               attendees.
@@ -72,10 +69,10 @@ export default function about() {
           HUSTENTERTAINMENT INTRODUCTION
         </h1>
         <div className="text-gray-500">
-          <p>Hotline: 0123456789 (M-F 8:30-18:30).</p>
-          <p>Email: test@example.com.</p>
-          <p>Fanpage: facebook.com.</p>
-          <p>Office address: 295 Bach Mai, Hai Ba Trưng, Ha Noi.</p>
+          <p>Hotline: 0338599051</p>
+          <p>Email: phuhuyqhqb@gmail.com</p>
+          <p>Facebook: https://www.facebook.com/phuhuyqhqb</p>
+          <p>Office address: 295 Bach Mai, Hai Ba Trưng, Ha Noi</p>
         </div>
       </div>
     </>

@@ -118,11 +118,11 @@ export default function HistoryPage() {
   return (
     <div className="min-h-[600px]">
       <h1 className="mt-8 flex justify-center text-3xl font-semibold text-primary">
-        Lịch sử mua vé
+        Order History
       </h1>
       {history?.length === 0 && (
         <div className="mt-8 text-gray-600 flex justify-center font-semibold text-2xl">
-          Không có đơn nào...
+          You have never ordered before
         </div>
       )}
       {history?.length > 0 &&
@@ -143,8 +143,8 @@ export default function HistoryPage() {
                   {order.name + " - " + DatePage(order.createdAt)}
                 </div>
                 <div className="text-primary text-sm ml-2">
-                  {order.evaluate && "Đã đánh giá"}
-                  {!order.evaluate && "Đánh giá ngay"}
+                  {order.evaluate && "Commented"}
+                  {!order.evaluate && "Comment"}
                 </div>
               </div>
               <div
@@ -168,22 +168,22 @@ export default function HistoryPage() {
                         setClickId("");
                       }}
                     >
-                      <span>Đóng</span>
+                      <span>Close</span>
                       <Close />
                     </div>
                     <div className="text-2xl text-gray-700 font-semibold mb-4 ml-6">
-                      Thông tin chi tiết
+                      Details
                     </div>
                   </div>
                   <div className="my-1 overflow-y-scroll max-h-[550px]">
                     <div className="mx-6 text-gray-600 font-medium text-lg mb-2">
-                      Sự kiện: {order.name}
+                      Concert: {order.name}
                     </div>
                     <div className="mx-6 text-gray-600 font-medium text-lg mb-2">
-                      Thời gian: {order.time + " - " + DatePage(order.date)}
+                      Order time: {order.time + " - " + DatePage(order.date)}
                     </div>
                     <div className="mx-6 text-gray-600 font-medium text-lg mb-2">
-                      Các loại vé đã mua
+                      Ticket type
                     </div>
                     <div className="mx-6">
                       {order.cartProducts.map((o, index) => (
@@ -205,10 +205,10 @@ export default function HistoryPage() {
                       ))}
                       <div>
                         <div className=" text-gray-600 font-medium text-lg mb-2">
-                          Giảm: {order.discount}
+                          Discount: {order.discount}
                         </div>
                         <div className=" text-gray-600 font-medium text-lg mb-2">
-                          Tổng cộng thanh toán: {order.sum - order.discount}
+                          Total payment: {order.sum - order.discount}
                         </div>
                       </div>
                       {order.evaluate === false && (
@@ -236,7 +236,7 @@ export default function HistoryPage() {
                               />
                             </div>
                             <div>
-                              <div>Số sao</div>
+                              <div>Star</div>
                               <div className="flex gap-1">
                                 {[1, 2, 3, 4, 5].map((index) => (
                                   <span
@@ -257,7 +257,7 @@ export default function HistoryPage() {
                               className="w-24 mb-4 mt-2"
                               onClick={(e) => handleFormSubmit(e, order._id)}
                             >
-                              Gửi
+                              Send
                             </button>
                           </div>
                         </div>
