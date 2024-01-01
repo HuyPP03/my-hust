@@ -90,7 +90,7 @@ for (let one of types)
             </span>
           </span>
         )}
-        {total === 0 && (
+        {total <= 0 && (
           <div className="font-semibold absolute top-40 right-0 bg-red-800 text-white p-2 rounded-bl-md">
               SOLD OUT
             </div>
