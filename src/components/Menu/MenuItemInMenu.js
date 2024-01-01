@@ -11,12 +11,47 @@ const MenuItemInMenu = ({
   date,
   categories,
   price,
+  address,
   artists,
   types,
-  address,
   index,
 }) => {
-  const addressReal = address.split(" ");
+  var mes = "";
+  var i = 0;
+for (let one of categories)
+{
+i++;
+mes += ", " + (one.category) ;
+if (i === 3)
+{
+  mes += "...";
+  break;
+};
+}
+mes = mes.slice(2);
+
+
+var mes1 = "";
+var i1 = 0;
+for (let one of artists)
+{
+i1++;
+mes1+= ", " + (one.name) ;
+if (i1 === 3)
+{
+  mes1 += "...";
+  break;
+};
+}
+mes1 = mes1.slice(2);
+
+let total = 0;
+for (let one of types)
+{
+  total += one.quantity;
+}
+
+
   return (
     <Link href={"/event/" + _id} className="flex flex-col justify-end">
       <div className="bg-primary/50 p-2 rounded-lg hover:bg-primary/20 hover:shadow-2xl hover: shadow-black/50 transition-all relative">
@@ -27,7 +62,10 @@ const MenuItemInMenu = ({
           width={300}
           height={300}
         />
-        <h1 className="font-semibold text-lg uppercase mt-8">{name}</h1>
+        <h1 className="font-bold text-lg uppercase mt-3">{name}</h1>
+        <h2 style={{ fontSize: 'smaller' }} className="font-semibold text-lg uppercase mt">
+  {mes1}
+</h2>
         <div className="flex justify-between text-sm items-center">
           <span className="h-5">From {price} VND</span>
           <div className="flex items-center gap-1 mt-1">
@@ -38,11 +76,11 @@ const MenuItemInMenu = ({
         <div className="flex justify-between text-sm">
           <div className="flex items-center gap-1">
             <MenuIcon className="w-4 h-4" />
-            <p className="">{categories[0].category}</p>
+            <p className="">{mes}</p>
           </div>
           <div className="flex items-center gap-1 mt-1">
             <MapIcon className="w-4 h-4" />
-            <p className="uppercase">{addressReal[addressReal.length - 1]}</p>
+            <p className="uppercase">{address}</p>
           </div>
         </div>
         {index < 10 && (
@@ -52,6 +90,12 @@ const MenuItemInMenu = ({
             </span>
           </span>
         )}
+        {total === 0 && (
+          <div className="font-semibold absolute top-40 right-0 bg-red-800 text-white p-2 rounded-bl-md">
+              SOLD OUT
+            </div>
+        )}
+
       </div>
     </Link>
   );
