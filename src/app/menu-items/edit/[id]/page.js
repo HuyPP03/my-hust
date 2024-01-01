@@ -16,8 +16,13 @@ export default function EditMenuItemPage() {
   const { id } = useParams();
   const { loading, data } = useProfile();
   const [menuItem, setMenuItem] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [types, setTypes] = useState([]);
+  const [quantity, setQuantity] = useState(0);
+
   const [redirectToItems, setRedirectToItems] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [sumAndDiscount, setSumAndDiscount] = useState({ sum: 0, discount: 0 });
 
   useEffect(() => {
     fetch("/api/menu-items").then((res) => {
@@ -26,7 +31,14 @@ export default function EditMenuItemPage() {
         setMenuItem(item);
       });
     });
+    fetch("/api/order").then((res) => {
+      res.json().then((items) => {
+        const orders = items.filter((i) => i.ticketId === id);
+        setOrders(orders);
+      });
+    });
   }, []);
+  console.log(orders);
   async function handleFormSubmit(e, data) {
     e.preventDefault();
     try {
@@ -69,6 +81,36 @@ export default function EditMenuItemPage() {
       console.log(error);
     }
   }
+  function handleClick() {
+    const typesArray = menuItem.types.map((type) => ({ ...type, quantity: 0 }));
+    orders.forEach((order) => {
+      const orderTypes = order.cartProducts;
+      setSumAndDiscount((prev) => {
+        return {
+          ...prev,
+          sum: prev.sum + order.sum,
+          discount: prev.discount + order.discount,
+        };
+      });
+      orderTypes.forEach((orderType) => {
+        const foundType = typesArray.find(
+          (type) => type.name === orderType.name
+        );
+        if (foundType) {
+          foundType.quantity += orderType.quantity;
+        }
+      });
+    });
+    setTypes(typesArray);
+    setQuantity(() => {
+      let quantity = 0;
+      typesArray.forEach((t) => {
+        quantity += t.quantity;
+      });
+      return quantity;
+    });
+  }
+  console.log(sumAndDiscount);
   if (redirectToItems) {
     return redirect("/menu-items");
   }
@@ -82,7 +124,10 @@ export default function EditMenuItemPage() {
             <div className="flex flex-col gap-3 justify-end rounded-tr-3xl overflow-hidden sticky">
               <div
                 className="bg-primary w-fit flex px-3 py-1 text-white h-fit cursor-pointer items-end ml-auto"
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  setIsOpen(false);
+                  setSumAndDiscount({ sum: 0, discount: 0 });
+                }}
               >
                 <span>Đóng</span>
                 <Close />
@@ -91,7 +136,42 @@ export default function EditMenuItemPage() {
                 Thống kê
               </div>
             </div>
-            <div className="ml-6 my-1 overflow-y-scroll max-h-[550px]"></div>
+            <div className="ml-6 my-1 overflow-y-scroll max-h-[550px]">
+              {types.length > 0 && (
+                <div>
+                  <div className="pb-8 pt-4 text-gray-500 font-medium grid grid-cols-2">
+                    <div>Loại vé</div>
+                    <div className="flex justify-end">Số lượng</div>
+                  </div>
+                  {types.map((o, index) => (
+                    <div
+                      key={index}
+                      className="py-4 text-gray-500 grid grid-cols-2 border-t border-dashed"
+                    >
+                      <div>
+                        <div>{o.name}</div>
+                        <div className="text-xs">{o.price} VND</div>
+                      </div>
+                      <div className="flex justify-end flex-col">
+                        <div className="flex justify-end">{o.quantity}</div>
+                        <div className="text-xs flex justify-end">
+                          {o.price * o.quantity} VND
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="text-gray-500 font-medium text-lg">
+                    Tổng số vé đã bán: {quantity}
+                  </div>
+                  <div className="text-gray-500 font-medium text-lg">
+                    Tổng tiền ban đầu: {sumAndDiscount.sum}
+                  </div>
+                  <div className="text-gray-500 font-medium text-lg mb-8">
+                    Tổng tiền giảm giá: {sumAndDiscount.discount}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -114,7 +194,13 @@ export default function EditMenuItemPage() {
                 label={"Delete this ticket"}
                 onDelete={handleDeleteClick}
               />
-              <button className="mt-4" onClick={() => setIsOpen(true)}>
+              <button
+                className="mt-4"
+                onClick={() => {
+                  setIsOpen(true);
+                  handleClick();
+                }}
+              >
                 Thống kê doanh thu
               </button>
             </div>

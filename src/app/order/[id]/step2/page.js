@@ -1,6 +1,6 @@
 "use client";
 
-import { redirect, useParams } from "next/navigation";
+import { redirect, useParams, useRouter } from "next/navigation";
 import { CartContext } from "@/app/Providers";
 import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
@@ -16,11 +16,10 @@ import Right from "@/components/Icons/Right";
 import Close from "@/components/Icons/Close";
 import ReceiptPercent from "@/components/Icons/ReceiptPercent";
 import DatePage from "@/libs/date";
-
 export default function Step2Page() {
   const { id } = useParams();
   const { data: session, status, update } = useSession();
-
+  const router = useRouter();
   const { cartProducts } = useContext(CartContext);
   const [order, setOrder] = useState(cartProducts);
   // console.log(order);
@@ -116,9 +115,9 @@ export default function Step2Page() {
           headers: { "Content-Type": "application/json" },
         });
         if (response.ok) {
+          const data = await response.json();
           const updatedTypes = menuItem.types.map((type) => {
             const orderedItem = order.find((item) => item.name === type.name);
-
             if (orderedItem) {
               return {
                 ...type,
@@ -141,6 +140,7 @@ export default function Step2Page() {
               };
             });
           }
+          router.replace("/order/step3/" + data._id);
           resolve();
         } else reject();
       });

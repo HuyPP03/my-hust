@@ -5,9 +5,12 @@ const NumberStar = ({ number }) => {
 
   for (let i = 0; i < number; i++) {
     stars.push(
-      <div key={i}>
-        <Image src={"/star-icon.webp"} width={15} height={15} alt="" />
-      </div>
+      <span
+        key={i}
+        className={`cursor-pointer text-2xl text-[#ffcc02] leading-4 rounded-full`}
+      >
+        ★
+      </span>
     );
   }
 
