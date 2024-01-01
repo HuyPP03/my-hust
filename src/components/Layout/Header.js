@@ -3,13 +3,27 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import Tippy from "@tippyjs/react/headless";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 export function Header() {
   const { data: session, status, update } = useSession();
+  const router = useRouter();
   const [showConfirm, setShowConfirm] = useState(false);
+  const [admin, setAdmin] = useState(false);
   let userName = session?.user.name || session?.user.email;
   const userEmail = session?.user.email;
   const userAvatar = session?.user.image;
+
+  useEffect(() => {
+    if (session?.user) {
+      fetch("/api/users").then((res) =>
+        res.json().then((users) => {
+          const user = users.find((u) => u.email === session?.user.email);
+          setAdmin(user.admin);
+        })
+      );
+    }
+  }, [session]);
   if (userName && userName.includes(" ")) {
     userName = userName.split(" ")[userName.split(" ").length - 1];
   }
@@ -31,6 +45,7 @@ export function Header() {
                   onClick={() => {
                     signOut();
                     setShowConfirm(false);
+                    // router.replace("/");
                   }}
                 >
                   Yes,&nbsp;Logout!
@@ -112,6 +127,62 @@ export function Header() {
                     />
                     Profile
                   </Link>
+                  {admin && (
+                    <>
+                      <Link
+                        href="/categories"
+                        className="flex items-center gap-2 font-medium text-slate-700 py-2 border-b-2"
+                      >
+                        <Image
+                          src={"/categories.png"}
+                          alt={""}
+                          width={20}
+                          height={20}
+                          className="w-5"
+                        />
+                        Categories
+                      </Link>
+                      <Link
+                        href="/menu-items"
+                        className="flex items-center gap-2 font-medium text-slate-700 py-2 border-b-2"
+                      >
+                        <Image
+                          src={"/tickets.png"}
+                          alt={""}
+                          width={20}
+                          height={20}
+                          className="w-5"
+                        />
+                        Tickets
+                      </Link>
+                      <Link
+                        href="/users"
+                        className="flex items-center gap-2 font-medium text-slate-700 py-2 border-b-2"
+                      >
+                        <Image
+                          src={"/users.webp"}
+                          alt={""}
+                          width={20}
+                          height={20}
+                          className="w-5"
+                        />
+                        Users
+                      </Link>
+                      <Link
+                        href="/vouchers"
+                        className="flex items-center gap-2 font-medium text-slate-700 py-2 border-b-2"
+                      >
+                        <Image
+                          src={"/vouchers.png"}
+                          alt={""}
+                          width={20}
+                          height={20}
+                          className="w-5"
+                        />
+                        Vouchers
+                      </Link>
+                    </>
+                  )}
                   <Link
                     href="/history"
                     className="flex items-center gap-2 font-medium text-slate-700 py-2 border-b-2"

@@ -4,7 +4,7 @@ import { useState } from "react";
 import EditableImage from "./EditableImage";
 import { useProfile } from "./UseProfile";
 
-export default function UserForm({ user, onSave }) {
+export default function UserForm({ user, onSave, myself = false }) {
   const [userName, setUserName] = useState(user?.name || "");
   const [image, setImage] = useState(user?.image || "");
   const [phone, setPhone] = useState(user?.phone || "");
@@ -52,6 +52,7 @@ export default function UserForm({ user, onSave }) {
           type="text"
           placeholder="Full name"
           value={userName}
+          disabled={myself}
           onChange={(e) => {
             setUserName(e.target.value);
           }}
@@ -68,6 +69,7 @@ export default function UserForm({ user, onSave }) {
           type="tel"
           placeholder="Phone number"
           value={phone}
+          disabled={myself}
           onChange={(e) => setPhone(e.target.value)}
         />
         <label>Address</label>
@@ -75,6 +77,7 @@ export default function UserForm({ user, onSave }) {
           type="text"
           placeholder="Address"
           value={address}
+          disabled={myself}
           onChange={(e) => setAddress(e.target.value)}
         />
         {loggedInUserData.admin && (

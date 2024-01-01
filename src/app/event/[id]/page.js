@@ -22,12 +22,14 @@ export default function OrderPage() {
   const { id } = useParams();
   const { data: session, status, update } = useSession();
   const [menuItem, setMenuItem] = useState(null);
+  const [sum, setSum] = useState(0);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [commentsId, setCommentsId] = useState([]);
   const [commentFives, setCommentFives] = useState([]);
 
   const date = new Date(menuItem?.date);
+  const currentDate = new Date();
   useEffect(() => {
     setLoading(true);
     fetch("/api/menu-items").then((res) => {
@@ -39,6 +41,14 @@ export default function OrderPage() {
     });
     fetchComment();
   }, []);
+  useEffect(() => {
+    if (menuItem) {
+      const sum = menuItem.types.reduce((sum, type) => {
+        return sum + Number(type.quantity);
+      }, 0);
+      setSum(sum);
+    }
+  }, [menuItem]);
   function fetchComment() {
     fetch("/api/comment").then((res) => {
       res.json().then((comment) => {
@@ -81,7 +91,7 @@ export default function OrderPage() {
                 Đánh giá
               </div>
             </div>
-            <div className="ml-6 my-1 overflow-y-scroll max-h-[550px]">
+            <div className="ml-6 my-1 overflow-y-scroll h-[550px]">
               {commentsId?.length > 0 &&
                 commentsId.map((c, i) => (
                   <div key={i} className="bg-white px-4 py-6">
@@ -139,18 +149,31 @@ export default function OrderPage() {
           </div>
         </div>
         <div className="w-72">
-          <Link
-            href={"/order/" + id}
-            className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center"
-          >
-            Mua vé ngay
-          </Link>
+          {currentDate < date ? (
+            sum > 0 ? (
+              <Link
+                href={"/order/" + id}
+                className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center"
+              >
+                Mua vé ngay
+              </Link>
+            ) : (
+              <div className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center">
+                Hết vé
+              </div>
+            )
+          ) : (
+            <div className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center">
+              Đã diễn ra
+            </div>
+          )}
           <div className="flex w-full mt-2">
             <div className="flex-1 flex justify-center p-1 border">Chia sẻ</div>
             <div className="flex-1 flex justify-center p-1 border">
               Quan tâm
             </div>
           </div>
+
           <span className="flex justify-center mt-2 text-gray-400 text-sm">
             --- Người quan tâm
           </span>
@@ -253,12 +276,24 @@ export default function OrderPage() {
             <Money className="w-4 h-4" />
             From {menuItem?.price} VND
           </div>
-          <Link
-            href={"/order/" + id}
-            className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center"
-          >
-            Mua vé ngay
-          </Link>
+          {currentDate < date ? (
+            sum > 0 ? (
+              <Link
+                href={"/order/" + id}
+                className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center"
+              >
+                Mua vé ngay
+              </Link>
+            ) : (
+              <div className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center">
+                Hết vé
+              </div>
+            )
+          ) : (
+            <div className="flex py-2 bg-primary text-white font-medium text-xl items-center justify-center">
+              Đã diễn ra
+            </div>
+          )}
           <div className="flex w-full mt-2">
             <div className="flex-1 flex justify-center p-1 border">Chia sẻ</div>
             <div className="flex-1 flex justify-center p-1 border">

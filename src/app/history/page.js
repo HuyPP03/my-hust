@@ -116,10 +116,15 @@ export default function HistoryPage() {
     }
   }
   return (
-    <div>
+    <div className="min-h-[600px]">
       <h1 className="mt-8 flex justify-center text-3xl font-semibold text-primary">
         Lịch sử mua vé
       </h1>
+      {history?.length === 0 && (
+        <div className="mt-8 text-gray-600 flex justify-center font-semibold text-2xl">
+          Không có đơn nào...
+        </div>
+      )}
       {history?.length > 0 &&
         history.map((order) => (
           <div className="m-4" key={order._id}>

@@ -22,6 +22,10 @@ export default function ResetPassword() {
         });
         const data = await res.json();
 
+        if (data.success) {
+          resolve();
+          router.push("/login");
+        } else reject();
         if (res.ok) resolve();
         else reject();
         if (data.success) {
@@ -31,7 +35,7 @@ export default function ResetPassword() {
       await toast.promise(promise, {
         loading: "Resetting...",
         success: "Reseted password!",
-        error: "error",
+        error: "Invalid or expired OTP.",
       });
     } catch (error) {
       console.error("Error resetting password:", error);

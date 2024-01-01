@@ -46,11 +46,14 @@ export default function OrderPage() {
       });
     });
   }, []);
-  const handleQuantityChange = (index, increment) => {
+  const handleQuantityChange = (index, increment, quantity) => {
     setOrder((prevOrder) => {
       const updatedOrder = [...prevOrder];
       if (increment < 0 && updatedOrder[index].quantity === 0)
         return updatedOrder;
+      if (increment > 0 && updatedOrder[index].quantity === quantity) {
+        return updatedOrder;
+      }
       updatedOrder[index].quantity += increment;
       return updatedOrder;
     });
@@ -68,8 +71,6 @@ export default function OrderPage() {
     setSum(total);
   }, [orderItem]);
 
-  console.log(order);
-  // console.log(menuItem?.types?.length, order, orderItem);
   const getFormattedDay = () => {
     const date = new Date(menuItem?.date);
     const daysOfWeek = [
@@ -82,7 +83,6 @@ export default function OrderPage() {
       "Thứ 7",
     ];
     const dayIndex = date?.getDay();
-    console.log(date);
     return daysOfWeek[dayIndex];
   };
   if (loading) return "Loading...";
@@ -138,6 +138,12 @@ export default function OrderPage() {
                       Hết vé
                     </span>
                   )}
+                  {order[index]?.quantity === type?.quantity &&
+                    type?.quantity > 0 && (
+                      <span className="text-primary font-semibold text-bg">
+                        Đã đến số lượng tối đa
+                      </span>
+                    )}
                 </div>
                 <div className="flex justify-end items-center">
                   {type?.price} VND
@@ -152,7 +158,7 @@ export default function OrderPage() {
                       className="px-3 py-1 flex items-center cursor-pointer"
                       onClick={() => {
                         if (type?.quantity > 0) {
-                          handleQuantityChange(index, -0.5);
+                          handleQuantityChange(index, -0.5, type.quantity);
                         }
                       }}
                     >
@@ -165,7 +171,7 @@ export default function OrderPage() {
                       className="px-3 py-1 flex items-center cursor-pointer"
                       onClick={() => {
                         if (type?.quantity > 0) {
-                          handleQuantityChange(index, 0.5);
+                          handleQuantityChange(index, 0.5, type.quantity);
                         }
                       }}
                     >

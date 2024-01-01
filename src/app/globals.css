@@ -5,7 +5,7 @@ select,input[type="email"],input[type="password"],input[type="text"],input[type=
     @apply block w-full mb-4 rounded-xl;
     @apply border p-2 border-gray-300 bg-gray-200;
 }
-input[type="email"]:disabled,input[type="password"]:disabled,input[type="text"]:disabled{
+input[type="email"]:disabled,input[type="password"]:disabled,input[type="text"]:disabled,input[type="tel"]:disabled{
     @apply bg-gray-300;
 }
 /* div:disabled{

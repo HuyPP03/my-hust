@@ -59,7 +59,9 @@ export default function UsersPage() {
         Edit User
       </h1>
       <div className="mt-8">
-        {user && <UserForm user={user} onSave={handleSaveButtonClick} />}
+        {user && (
+          <UserForm user={user} onSave={handleSaveButtonClick} myself={true} />
+        )}
       </div>
     </section>
   );

@@ -1,12 +1,8 @@
 import nodemailer from "nodemailer";
-import qrcode from "qrcode";
 
 export async function POST(req) {
   try {
-    const { id, email } = await req.json();
-    console.log(id);
-    const qrCodeImage = await qrcode.toDataURL(JSON.stringify(id));
-    console.log(qrCodeImage);
+    const data = await req.json();
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -20,11 +16,14 @@ export async function POST(req) {
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: email,
-      subject: "Your QRcode: ",
+      to: process.env.EMAIL_USER,
+      subject: `Contact by ${data.email}`,
       html: `
-        <p>Your HTML content with QR code here:</p>
-        <div style="display: inline-block; background: url(${qrCodeImage}) no-repeat; width: 200px; height: 200px;"></div>
+        <p>Name: ${data.firstName + " " + data.lastName}</p>
+        <p>Email: ${data.email}</p>
+        <p>Address: ${data.address}</p>
+        <p>Phone number: ${data.phoneNumber}</p>
+        <p>Message: ${data.message}</p>
       `,
     };
 
